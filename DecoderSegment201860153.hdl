@@ -1,26 +1,19 @@
+/**
+ * 7-segment decoder for segment f
+ * Student: Mingjiang Bai (201860153)
+ * Group: 13, Code: 0521634
+ */
 CHIP DecoderSegment201860153 {
-    IN A, B, C, D;
+    IN D, C, B, A;
     OUT f;
 
     PARTS:
-    // term1: A AND C
-    And(a=A, b=C, out=AC);
-
-    // term2: C AND (NOT D)
-    Not(in=D, out=NotD);
-    And(a=C, b=NotD, out=CNotD);
-
-    // term3: A AND B
-    And(a=A, b=B, out=AB);
-
-    // term4: (NOT B) AND (NOT C) AND (NOT D)
-    Not(in=B, out=NotB);
-    Not(in=C, out=NotC);
-    And(a=NotB, b=NotC, out=NotB_NotC);
-    And(a=NotB_NotC, b=NotD, out=Term4);
-
-    // Combine all terms with Or
-    Or(a=AC, b=CNotD, out=Or1);
-    Or(a=Or1, b=AB, out=Or2);
-    Or(a=Or2, b=Term4, out=f);
+    // Implement f = D + C + B'·A + B·A'
+    Not(in=B, out=notB);
+    Not(in=A, out=notA);
+    And(a=notB, b=A, out=term1);  // B'·A
+    And(a=B, b=notA, out=term2);   // B·A'
+    Or(a=D, b=C, out=term3);
+    Or(a=term1, b=term2, out=term4);
+    Or(a=term3, b=term4, out=f);
 }
