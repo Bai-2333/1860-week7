@@ -3,24 +3,24 @@ CHIP DecoderSegment201860153 {
     OUT f;
 
     PARTS:
-    // Term 1: A AND C
+    // term1: A AND C
     And(a=A, b=C, out=AC);
 
-    // Term 2: C AND NOT D
+    // term2: C AND (NOT D)
     Not(in=D, out=NotD);
-    And(a=C, b=NotD, out=C_NotD);
+    And(a=C, b=NotD, out=CNotD);
 
-    // Term 3: A AND B
+    // term3: A AND B
     And(a=A, b=B, out=AB);
 
-    // Term 4: NOT B AND NOT C AND NOT D
+    // term4: (NOT B) AND (NOT C) AND (NOT D)
     Not(in=B, out=NotB);
     Not(in=C, out=NotC);
     And(a=NotB, b=NotC, out=NotB_NotC);
-    And(a=NotB_NotC, b=NotD, out=NotB_NotC_NotD);
+    And(a=NotB_NotC, b=NotD, out=Term4);
 
-    // OR all terms together
-    Or(a=AC, b=C_NotD, out=term1);
-    Or(a=term1, b=AB, out=term2);
-    Or(a=term2, b=NotB_NotC_NotD, out=f);
+    // Combine all terms with Or
+    Or(a=AC, b=CNotD, out=Or1);
+    Or(a=Or1, b=AB, out=Or2);
+    Or(a=Or2, b=Term4, out=f);
 }
